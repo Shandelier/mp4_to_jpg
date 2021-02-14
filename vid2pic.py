@@ -20,6 +20,8 @@ parser.add_argument('--input', type=str,
                     default=r"C:\Users\kluse\Documents\python\SSR-Dataset\test")
 parser.add_argument('--output', type=str,
                     default=r"C:\Users\kluse\Documents\python\SSR-Dataset")
+parser.add_argument('--downsampling', type=int,
+                    default=1)
 args = parser.parse_args()
 
 
@@ -27,8 +29,13 @@ def split_frame_file(file, out_path, downsampling=10):
     cap = cv2.VideoCapture(file)
     name = os.path.basename(file)
     out = out_path
+
     # posenet train picture size: 353x257
-    dsize = (353, 257)
+    # but video size is in 16:9 aspect ratio
+    dsize = (457, 257)
+    # TODO: cropping
+    # cropsize = (353, 257)
+    # crop_img = img[y:y+h, x:x+w]
 
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     print("{} vid of {} estimated frames".format(name, n_frames))
@@ -49,6 +56,8 @@ def split_frame_file(file, out_path, downsampling=10):
     print("{} samples extracted".format(n_samples))
 
 
+downsampling = args.downsampling
+
 src_path = args.input + r"/"
 files = ut.dir2files(src_path)
 print("files found: ", files)
@@ -58,6 +67,6 @@ if not os.path.isdir(out_path):
     os.makedirs(out_path)
 
 for file in files:
-    split_frame_file(file, out_path, 1)
+    split_frame_file(file, out_path, downsampling)
 
 print("[  INFO  ] Extraction finished")
