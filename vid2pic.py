@@ -49,7 +49,7 @@ def split_frame_file(file, out_path, downsampling=10):
     print("{} samples extracted".format(n_samples))
 
 
-src_path = args.input
+src_path = args.input + r"/"
 files = ut.dir2files(src_path)
 print("files found: ", files)
 
