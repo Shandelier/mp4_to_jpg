@@ -27,7 +27,6 @@ args = parser.parse_args()
 
 def split_frame_file(file, out_path, downsampling=10):
     cap = cv2.VideoCapture(file)
-    name = os.path.basename(file)
     out = out_path
 
     # posenet train picture size: 353x257
@@ -38,14 +37,16 @@ def split_frame_file(file, out_path, downsampling=10):
     # crop_img = img[y:y+h, x:x+w]
 
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    print("{} vid of {} estimated frames".format(name, n_frames))
+    print("{} vid of {} estimated frames".format(
+        os.path.basename(file), n_frames))
 
     i = 0
     while(True):
         ret, frame = cap.read()
         if ret:
             frame = cv2.resize(frame, dsize)
-            path = "{}/{}_{}.jpg".format(out, name, str(i))
+            path = "{}/{}_{}.jpg".format(out,
+                                         os.path.splitext(file)[0], str(i))
             cv2.imwrite(path, frame)
             i += downsampling
             if not i % (n_frames/10):
