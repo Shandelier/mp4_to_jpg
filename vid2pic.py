@@ -48,6 +48,8 @@ def split_frame_file(file, out_path, downsampling=10):
             path = "{}/{}_{}.jpg".format(out, name, str(i))
             cv2.imwrite(path, frame)
             i += downsampling
+            if not i % (n_frames/10):
+                print("{}/% of video ready".format(i/n_frames*100))
             cap.set(1, i)
         else:
             break
