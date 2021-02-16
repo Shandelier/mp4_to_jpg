@@ -7,13 +7,7 @@
 
 import cv2
 import os
-import shutil
 import argparse
-from math import floor
-from tqdm import tqdm
-import pandas as pd
-import numpy as np
-import utils as ut
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--vid_dir', type=str,
