@@ -15,7 +15,7 @@ parser.add_argument('--vid_dir', type=str,
 parser.add_argument('--output', type=str,
                     default="./output")
 parser.add_argument('--downsampling', type=int,
-                    default=10)
+                    default=1)
 args = parser.parse_args()
 
 
@@ -59,9 +59,11 @@ def split_frame_file(file, out_dir):
 
     path = ""
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    print("{} vid of {} estimated frames".format(
+    print("{} vid of {} estimated frames (without downsampling)".format(
         os.path.basename(file), n_frames))
 
+    progress_tenth = int(n_frames/(10*args.downsampling))
+    current_progress = 0
     i = 0
     while(True):
         ret, frame = cap.read()
@@ -70,8 +72,10 @@ def split_frame_file(file, out_dir):
             path = "{}/{}.jpg".format(out_dir, str(i))
             cv2.imwrite(path, frame)
             i += args.downsampling
-            if not (i % (n_frames/10)):
-                print("{}/% of video ready".format(i/n_frames*100))
+            current_progress += 1
+            if (current_progress == progress_tenth):
+                print("{}/% of video ready".format(int(i/n_frames*100)))
+                current_progress = 0
             cap.set(1, i)
         else:
             break
